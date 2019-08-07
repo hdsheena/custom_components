@@ -64,7 +64,28 @@ class BCHydroUsageSensor(Entity):
 
 URL_LOGIN = "https://app.bchydro.com/sso/UI/Login"
 URL_GET_USAGE = "https://app.bchydro.com/evportlet/SystemServices/main?system:runTemplate=html/indicators/AccountProfile.xml"
-
+# to get all the usage within a timeframe, use this url instead
+url_detailed_usage = "https://app.bchydro.com/evportlet/SystemServices/main?system:runTemplate=html/indicators/Consumption.xml"
+# probably not all these fields are needed..
+# Slid: self._slid
+# Account: self._account_number
+# ChartType: column
+# Granularity: hourly
+# Overlays: <OverlayId>none</OverlayId>
+# StartDateTime: 2019-08-05T00:00:00-07:00
+# EndDateTime: 2019-08-05T23:59:59-07:00
+# DateRange: currentBill
+# HeatingType: N
+# PremiseType: 10
+# PostalCode: <<DEFINE>>
+# BillingArea: <<TWO DIGIT NUMBER>>
+# ValidityStart: 2018-04-27T00:00:00-07:00
+# ValidityEnd: 9999-12-31T00:00:00-08:00
+# MRU: <<Some letters and numbers>>
+# BillingClass: Residential
+# EnablementDate: <<account start date?>>
+# UserClick: 
+# RateGroup: RES1
 
 class Api:
     def __init__(self, username, password, account_number, slid, timeout=10):
@@ -102,7 +123,11 @@ class Api:
 
         latest_usage = None
         root = ET.fromstring(r.text)
+        # run through all the "points" in the series one at a time.
         for point in root.findall('Series')[0].findall('Point'):
+            # By checking for invalid, you're reassigning this variable for each point, until 
+            # they're invalid, which means you're getting the last valid point. This strikes me as a terribly inelegant
+            # solution but what do i know?
             if point.get('quality') != 'INVALID':
                 latest_usage = point.get('value')
 
