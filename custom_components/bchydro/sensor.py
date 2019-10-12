@@ -123,6 +123,7 @@ class Api:
             }, cookies=auth_cookies)
 
         latest_usage = None
+        r = r.text
         r = ''.join(filter(lambda x: x in string.printable, r)) # This is the line that I added (with import above)
 
         root = ET.fromstring(r.text)
