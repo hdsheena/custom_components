@@ -126,7 +126,7 @@ class Api:
         r = r.text
         r = ''.join(filter(lambda x: x in string.printable, r)) # This is the line that I added (with import above)
 
-        root = ET.fromstring(r.text)
+        root = ET.fromstring(r)
         # run through all the "points" in the series one at a time.
         for point in root.findall('Series')[0].findall('Point'):
             # By checking for invalid, you're reassigning this variable for each point, until 
