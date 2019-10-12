@@ -1,4 +1,5 @@
 import logging
+import string
 import xml.etree.ElementTree as ET
 
 import homeassistant.helpers.config_validation as cv
@@ -122,6 +123,8 @@ class Api:
             }, cookies=auth_cookies)
 
         latest_usage = None
+        r = ''.join(filter(lambda x: x in string.printable, r)) # This is the line that I added (with import above)
+
         root = ET.fromstring(r.text)
         # run through all the "points" in the series one at a time.
         for point in root.findall('Series')[0].findall('Point'):
