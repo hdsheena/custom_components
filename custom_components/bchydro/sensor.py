@@ -116,6 +116,8 @@ class Api:
             redirect_URL2 = r.headers['Location']
             r = requests.get(redirect_URL2, cookies=jar)
             jar.update(r.cookies)
+            _LOGGER.debug("While loop: cookie jar %s",jar)
+        _LOGGER.debug("Before return: cookie jar %s",jar)
         return jar
 
     def latest_usage(self):
