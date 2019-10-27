@@ -118,16 +118,19 @@ class Api:
         """Fetch new state data for the sensor."""
         auth_cookies = self.login()
         _LOGGER.debug("Cookies passing to request: %s",auth_cookies)
-        r = self._call_api(
-            "post",
-            URL_GET_USAGE,
-            headers={"X-Requested-With": "XMLHttpRequest","Content-Type": "application/x-www-form-urlencoded"},
-            data={                
+        dataDict={                
                 "Account": self._account_number,
                 "Slid": self._slid,
                 "ValidityStart": '2015-09-03T00:00:00.000-07:00',
                 "ValidityEnd": '9999-12-31T00:00:00.000-08:00'
-            }, cookies=auth_cookies)
+            }
+        _LOGGER.debug("dataDict passing to post call: %s",dataDict)
+        
+        r = self._call_api(
+            "post",
+            URL_GET_USAGE,
+            headers={"X-Requested-With": "XMLHttpRequest","Content-Type": "application/x-www-form-urlencoded"},
+            data=dataDict, cookies=auth_cookies)
 
         latest_usage = None
         r = r.text
@@ -147,12 +150,13 @@ class Api:
     def _call_api(self, method, url, **kwargs):
         payload = kwargs.get("params") or kwargs.get("data")
 
-        _LOGGER.debug("About to call %s with payload=%s", url, payload)
+        _LOGGER.debug("_call_api: About to call %s with payload=%s", url, payload)
 
         response = requests.request(method, url, timeout=self._timeout, **kwargs)
 
-        _LOGGER.debug("Received API response: %s, %s",
+        _LOGGER.debug("_call_api: Received API response: %s, headers: %s - content: %s",
                       response.status_code,
+                      response.headers,
                       response.content)
 
         response.raise_for_status()
