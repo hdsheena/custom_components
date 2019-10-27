@@ -32,7 +32,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the sensor platform."""
     api = Api(config.get(CONF_USERNAME),
               config.get(CONF_PASSWORD),
-              config.get(CONF_ACCOUNT_NUMBER),
+              config.get(str(CONF_ACCOUNT_NUMBER)),
               config.get(CONF_SLID),
               config.get(CONF_TIMEOUT))
     add_devices([BCHydroUsageSensor(api)], True)
