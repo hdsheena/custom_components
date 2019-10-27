@@ -117,6 +117,7 @@ class Api:
     def latest_usage(self):
         """Fetch new state data for the sensor."""
         auth_cookies = self.login()
+        _LOGGER.debug("Cookies passing to request: %s",auth_cookies)
         r = self._call_api(
             "post",
             URL_GET_USAGE,
