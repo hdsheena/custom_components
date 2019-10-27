@@ -120,6 +120,7 @@ class Api:
         r = self._call_api(
             "post",
             URL_GET_USAGE,
+            headers={"X-Requested-With": "XMLHttpRequest","Content-Type": "application/x-www-form-urlencoded"},
             data={
                 "Slid": self._slid,
                 "Account": self._account_number,
