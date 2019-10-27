@@ -130,7 +130,7 @@ class Api:
             "post",
             URL_GET_USAGE,
             headers={"X-Requested-With": "XMLHttpRequest","Content-Type": "application/x-www-form-urlencoded"},
-            data=dataDict, cookies=auth_cookies)
+            data=dataDict, cookies=auth_cookies,allow_redirects=False)
 
         latest_usage = None
         r = r.text
