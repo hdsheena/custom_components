@@ -64,7 +64,7 @@ class BCHydroUsageSensor(Entity):
 
 
 URL_LOGIN = "https://app.bchydro.com/sso/UI/Login"
-URL_GET_USAGE = "https://app.bchydro.com/evportlet/SystemServices/main?system:runTemplate=html/indicators/AccountProfile.xml"
+URL_GET_USAGE = "https://app.bchydro.com/evportlet/web/account-profile-data.html"
 # to get all the usage within a timeframe, use this url instead
 url_detailed_usage = "https://app.bchydro.com/evportlet/SystemServices/main?system:runTemplate=html/indicators/Consumption.xml"
 # probably not all these fields are needed..
@@ -106,8 +106,12 @@ class Api:
                 'email': self._username,
                 'password': self._password,
             }, allow_redirects=False)
-
-        return r.cookies
+        jar = r.cookies
+        while r.status_code == 302:
+            redirect_URL2 = r.headers['Location']
+            r = requests.get(redirect_URL2, cookies=jar)
+            jar.update(r.cookies)
+        return jar
 
     def latest_usage(self):
         """Fetch new state data for the sensor."""
