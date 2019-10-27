@@ -122,9 +122,9 @@ class Api:
             "post",
             URL_GET_USAGE,
             headers={"X-Requested-With": "XMLHttpRequest","Content-Type": "application/x-www-form-urlencoded"},
-            data={
-                "Slid": self._slid,
+            data={                
                 "Account": self._account_number,
+                "Slid": self._slid,
                 "ValidityStart": '2015-09-03T00:00:00.000-07:00',
                 "ValidityEnd": '9999-12-31T00:00:00.000-08:00'
             }, cookies=auth_cookies)
