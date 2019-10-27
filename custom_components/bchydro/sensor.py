@@ -32,7 +32,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     """Setup the sensor platform."""
     api = Api(config.get(CONF_USERNAME),
               config.get(CONF_PASSWORD),
-              config.get(str(CONF_ACCOUNT_NUMBER)),
+              config.get(CONF_ACCOUNT_NUMBER),
               config.get(CONF_SLID),
               config.get(CONF_TIMEOUT))
     add_devices([BCHydroUsageSensor(api)], True)
@@ -108,7 +108,11 @@ class Api:
                 'gotoUrl':"https://app.bchydro.com:443/BCHCustomerPortal/web/login.html"
             }, allow_redirects=False)
         jar = r.cookies
+        _LOGGER.debug("What's the location? %s",r.headers['Location'])
+
         while r.status_code == 302:
+            _LOGGER.debug("While loop is running!")
+
             redirect_URL2 = r.headers['Location']
             r = requests.get(redirect_URL2, cookies=jar)
             jar.update(r.cookies)
