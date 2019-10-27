@@ -105,6 +105,7 @@ class Api:
                 "realm": "bch-ps",
                 'email': self._username,
                 'password': self._password,
+                'gotoUrl':"https://app.bchydro.com:443/BCHCustomerPortal/web/login.html"
             }, allow_redirects=False)
         jar = r.cookies
         while r.status_code == 302:
